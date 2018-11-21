@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MusicPlayModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="MusicPlayModelStoreContainer">
+          <EntitySet Name="AlbumMaster" EntityType="MusicPlayModel.Store.AlbumMaster" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="GenreMaster" EntityType="MusicPlayModel.Store.GenreMaster" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MusicTag" EntityType="MusicPlayModel.Store.MusicTag" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="AlbumMaster">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="ReleasingDate" Type="varchar" MaxLength="25" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GenreMaster">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Genre" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MusicTag">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="GenreId" Type="int" />
+          <Property Name="Length" Type="time" Nullable="false" />
+          <Property Name="FullPath" Type="varchar" Nullable="false" MaxLength="500" />
+          <Property Name="Rating" Type="int" />
+          <Property Name="AlbumId" Type="int" />
+          <Property Name="FileSize" Type="decimal" Nullable="false" Scale="2" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MusicPlayModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="MusicPlayEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="AlbumMasters" EntityType="MusicPlayModel.AlbumMaster" />
+          <EntitySet Name="GenreMasters" EntityType="MusicPlayModel.GenreMaster" />
+          <EntitySet Name="MusicTags" EntityType="MusicPlayModel.MusicTag" />
+          <AssociationSet Name="MusicTagGenreMaster" Association="MusicPlayModel.MusicTagGenreMaster">
+            <End Role="MusicTag" EntitySet="MusicTags" />
+            <End Role="GenreMaster" EntitySet="GenreMasters" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="AlbumMaster">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ReleasingDate" Type="String" MaxLength="25" Unicode="false" FixedLength="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GenreMaster">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Genre" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="MusicTag" Relationship="MusicPlayModel.MusicTagGenreMaster" FromRole="GenreMaster" ToRole="MusicTag" />
+        </EntityType>
+        <EntityType Name="MusicTag">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="GenreId" Type="Int32" />
+          <Property Name="Length" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="FullPath" Type="String" Nullable="false" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="Rating" Type="Int32" />
+          <Property Name="AlbumId" Type="Int32" />
+          <Property Name="FileSize" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="GenreMasters" Relationship="MusicPlayModel.MusicTagGenreMaster" FromRole="MusicTag" ToRole="GenreMaster" />
+        </EntityType>
+        <Association Name="MusicTagGenreMaster">
+          <End Type="MusicPlayModel.MusicTag" Role="MusicTag" Multiplicity="1" />
+          <End Type="MusicPlayModel.GenreMaster" Role="GenreMaster" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MusicPlayModelStoreContainer" CdmEntityContainer="MusicPlayEntities">
+          <EntitySetMapping Name="AlbumMasters">
+            <EntityTypeMapping TypeName="MusicPlayModel.AlbumMaster">
+              <MappingFragment StoreEntitySet="AlbumMaster">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ReleasingDate" ColumnName="ReleasingDate" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GenreMasters">
+            <EntityTypeMapping TypeName="MusicPlayModel.GenreMaster">
+              <MappingFragment StoreEntitySet="GenreMaster">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Genre" ColumnName="Genre" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MusicTags">
+            <EntityTypeMapping TypeName="MusicPlayModel.MusicTag">
+              <MappingFragment StoreEntitySet="MusicTag">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="GenreId" ColumnName="GenreId" />
+                <ScalarProperty Name="Length" ColumnName="Length" />
+                <ScalarProperty Name="FullPath" ColumnName="FullPath" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+                <ScalarProperty Name="AlbumId" ColumnName="AlbumId" />
+                <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
