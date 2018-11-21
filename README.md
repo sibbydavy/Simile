@@ -1,2 +1,3 @@
 # Simile
-Simile helps to organizing music file 
+Simile helps to organizing music file.
+
